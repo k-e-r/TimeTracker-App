@@ -39,6 +39,7 @@ const Featured = () => {
   const { user } = useContext(AuthContext);
   const [durationAll, setDurationAll] = useState(0);
   const [data, setData] = useState([]);
+  const [withProject, setWithProject] = useState();
   const [color, setColor] = useState([]);
   const [getTasks, setGetTasks] = useState([]);
   const [getProjects, setGetProjects] = useState([]);
@@ -62,6 +63,7 @@ const Featured = () => {
         let array = [];
         const resultOdd = taskArr.filter((n, i) => i % 2 === 1);
         const resultEven = taskArr.filter((n, i) => i % 2 === 0);
+
         for (let i = 0; i < getProjects.length; i++) {
           sum += getTasks[i].taskDuration;
           colorArr.push(getProjects[i].colorCode);
@@ -70,10 +72,11 @@ const Featured = () => {
             value: resultOdd[i],
           });
         }
-        for (let i = 0; i < getTasks.length; i++) {
-          sum += getTasks[i].taskDuration;
+        for (let i = 0; i < resultOdd.length; i++) {
+          sum += resultOdd[i];
         }
         setDurationAll(sum);
+        setWithProject(sum - resultOdd.slice(-1)[0]);
         setData(array);
         setColor(colorArr);
       } catch (err) {
@@ -133,10 +136,10 @@ const Featured = () => {
             <div className="itemTitle">BILLABLE HOURS</div>
             <div className="itemResult">
               <div className="resultAmount">{`${(
-                "00" + Math.floor(durationAll / 3600)
-              ).slice(-2)}:${("00" + (Math.floor(durationAll / 60) % 60)).slice(
+                "00" + Math.floor(withProject / 3600)
+              ).slice(-2)}:${("00" + (Math.floor(withProject / 60) % 60)).slice(
                 -2
-              )}:${("00" + (durationAll % 60)).slice(-2)}`}</div>
+              )}:${("00" + (withProject % 60)).slice(-2)}`}</div>
             </div>
           </div>
         </div>

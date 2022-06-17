@@ -15,12 +15,10 @@ import { AuthContext } from "../../context/AuthContext";
 import { useState } from "react";
 import { format } from "date-fns";
 
-const Chart = ({ aspect, title }) => {
+const Chart = ({ aspect }) => {
   const { user } = useContext(AuthContext);
   const [weekData, setWeekData] = useState([{}]);
   const [weekDays, setWeekDays] = useState([]);
-  const [weekTasks, setWeekTasks] = useState([]);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,55 +30,48 @@ const Chart = ({ aspect, title }) => {
         let thisMonday = date - dayNum + 1;
         let arr = [];
         let num = 0;
-        let dataArr = [];
+        const tmpDataArr = [];
 
         const res = await axios.get(`/tasks/user/${user._id}/week`);
         res.data.sort((p1, p2) => {
           return new Date(p1.startTime) - new Date(p2.startTime);
         });
         setWeekData(res.data);
-        console.log(format(new Date(weekData[2].startTime), "dd"));
 
-        // for (let i = 0; i < weekData.length; i++) {
-        //   dataArr.push(new Date(res.data[i].createdAt).getDay());
-        // }
+        for (let i = 0; i < 7; i++) {
+          tmpDataArr.push(
+            res.data?.filter((el) => {
+              if (
+                format(new Date(el.startTime), "dd") ===
+                (thisMonday + i).toString()
+              ) {
+                return el;
+              }
+            })
+          );
+        }
+
+        const resultArr = tmpDataArr.map((dayTask) => {
+          let taskSum = 0;
+          dayTask.map((task) => (taskSum += task.taskDuration));
+          return taskSum;
+        });
 
         for (let i = 0; i < 7; i++) {
           num = thisMonday + i;
           arr.push({
             date: `${todayMonth}/` + num,
-            time: weekData[i].taskDuration,
+            time: resultArr[i],
           });
         }
 
         setWeekDays(arr);
-        setWeekTasks(dataArr);
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
   }, [user._id, weekData.length]);
-  console.log();
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const res = await axios.get(`/tasks/user/${user._id}`);
-  //       console.log(new Date(res.data[2].createdAt).getMonth() + 1);
-
-  //       setWeekData(
-  //         res.data.filter((p1) => {})
-  //         // res.data.sort((p1, p2) => {
-  //         //   return new Date(p2.createdAt) - new Date(p1.createdAt);
-  //         // })
-  //       );
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [user._id]);
 
   return (
     <div className="chart">

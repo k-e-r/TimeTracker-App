@@ -4,21 +4,84 @@
   display: flex;
   align-items: center;
 
-  .timerShowSummaryHr {
-    width: 1.25rem;
-    transform: rotate(90deg);
-    border: 0.5px solid #d3d3d3;
-    margin-left: 1rem;
+  .showLeftItem {
+    height: 3.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: 0.8rem;
+    font-size: 0.85rem;
+    color: #5d5d5d;
+
+    span {
+      cursor: pointer;
+      margin: 0 0.7rem;
+
+      &:hover {
+        color: rgb(178, 178, 178);
+      }
+    }
+
+    svg {
+      width: 1.245rem;
+      height: 1.245rem;
+      fill: #5d5d5d;
+      cursor: pointer;
+
+      &:hover {
+        fill: rgb(178, 178, 178);
+      }
+    }
   }
 
-  .showTodayTitle,
-  .showThisWeekTitle {
-    margin: 0 1rem;
-    font-size: 0.8rem;
-    color: #5f5f5f;
-  }
+  .showRightItem {
+    height: 3.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-right: 0.8rem;
+    position: relative;
+    justify-content: flex-end;
 
-  .showTodayTime,
-  .showThisWeekTime {
+    .timerShowSummaryHr {
+      width: 1.25rem;
+      transform: rotate(90deg);
+      border: 0.5px solid #d3d3d3;
+      margin-left: 1rem;
+    }
+
+    .showTodayTitle,
+    .showThisWeekTitle {
+      margin: 0 1rem;
+      font-size: 0.8rem;
+      color: #5f5f5f;
+    }
+
+    .showTodayTime,
+    .showThisWeekTime {
+    }
+
+    .showChangeView {
+      display: flex;
+      margin: 0 0.2rem 0 1.2rem;
+      font-size: 0.8rem;
+      color: #5f5f5f;
+      cursor: pointer;
+
+      &:hover {
+        color: #bababa;
+
+        svg {
+          fill: #bababa;
+        }
+      }
+
+      svg {
+        fill: #5f5f5f;
+        width: 1rem;
+        height: 1rem;
+        margin-left: 0.1rem;
+      }
+    }
   }
 }

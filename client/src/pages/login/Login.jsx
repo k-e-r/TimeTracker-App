@@ -1,28 +1,29 @@
-import { useContext, useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
-import axios from 'axios';
-import * as yup from 'yup';
-import './login.scss';
+import { useContext, useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
+import * as yup from "yup";
+import "./login.scss";
 
-import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
-import { FcGoogle } from 'react-icons/fc';
+import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
+import { FcGoogle } from "react-icons/fc";
+import { MdAlarm } from "react-icons/md";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [emailLabelCss, setEmailLabelCss] = useState('');
-  const [passLabelCss, setPassLabelCss] = useState('');
-  const [emailErr, setEmailErr] = useState('');
-  const [passErr, setPassErr] = useState('');
+  const [emailLabelCss, setEmailLabelCss] = useState("");
+  const [passLabelCss, setPassLabelCss] = useState("");
+  const [emailErr, setEmailErr] = useState("");
+  const [passErr, setPassErr] = useState("");
   const emailSchema = yup.object({
     email: yup
       .string()
-      .email('Must be a valid email')
+      .email("Must be a valid email")
       .max(50)
-      .required('Email is required'),
+      .required("Email is required"),
   });
   const passSchema = yup.object({
-    password: yup.string().max(50).required('Password is required'),
+    password: yup.string().max(50).required("Password is required"),
   });
 
   const email = useRef();
@@ -39,18 +40,18 @@ const Login = () => {
     const interval = setInterval(() => {
       try {
         const detect = document.querySelectorAll(
-          ':-internal-autofill-selected'
+          ":-internal-autofill-selected"
         );
         if (detect.length === 2) {
-          setEmailLabelCss('rInputLabelActive');
-          setPassLabelCss('rInputLabelActive');
-        } else if (detect[0].type === 'email') {
-          setEmailLabelCss('rInputLabelActive');
+          setEmailLabelCss("rInputLabelActive");
+          setPassLabelCss("rInputLabelActive");
+        } else if (detect[0].type === "email") {
+          setEmailLabelCss("rInputLabelActive");
         } else {
-          setPassLabelCss('rInputLabelActive');
+          setPassLabelCss("rInputLabelActive");
         }
       } catch (error) {
-        console.log('error:', error);
+        console.log("error:", error);
       }
 
       clearInterval(interval);
@@ -63,13 +64,13 @@ const Login = () => {
   };
 
   const handleBlur = (e) => {
-    if (e.target.type === 'email') {
-      if (e.target.value) setEmailLabelCss('rInputLabelActive');
-      else setEmailLabelCss('');
+    if (e.target.type === "email") {
+      if (e.target.value) setEmailLabelCss("rInputLabelActive");
+      else setEmailLabelCss("");
       validateCheck(e.target.value, null);
     } else {
-      if (e.target.value) setPassLabelCss('rInputLabelActive');
-      else setPassLabelCss('');
+      if (e.target.value) setPassLabelCss("rInputLabelActive");
+      else setPassLabelCss("");
       validateCheck(null, e.target.value);
     }
   };
@@ -87,7 +88,7 @@ const Login = () => {
           email,
         })
         .then(function (value) {
-          setEmailErr('');
+          setEmailErr("");
           return true;
         })
         .catch(function (err) {
@@ -103,7 +104,7 @@ const Login = () => {
           password,
         })
         .then(function (value) {
-          setPassErr('');
+          setPassErr("");
           return true;
         })
         .catch(function (err) {
@@ -122,14 +123,14 @@ const Login = () => {
     const password = e.target[1].value;
     const result = await validateCheck(email, password);
     if (!result.some((el) => el === false)) {
-      dispatch({ type: 'LOGIN_START' });
+      dispatch({ type: "LOGIN_START" });
       try {
-        const res = await axios.post('/auth/login', credentials);
-        console.log('login:', res);
-        dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.details });
-        navigate('/');
+        const res = await axios.post("/auth/login", credentials);
+        console.log("login:", res);
+        dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
+        navigate("/");
       } catch (err) {
-        dispatch({ type: 'LOGIN_FAILURE', payload: err.response.data });
+        dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });
       }
     }
   };
@@ -138,7 +139,10 @@ const Login = () => {
     <div className='Login'>
       <div className='lContainer'>
         <div className='lLogo'>
-          <a href='/register'>LOGO</a>
+          <a href='/register'>
+            TimeTracker
+            <MdAlarm />
+          </a>
         </div>
         <div className='lTitleContainer'>
           <h3 className='lTitle'>Hi, Welcome Back</h3>
@@ -147,7 +151,7 @@ const Login = () => {
           </span>
         </div>
         <div className='lOption'>
-          <button className='rOptionGoogle'>
+          {/* <button className='rOptionGoogle'>
             <FcGoogle />
             Sign In With Google
           </button>
@@ -158,7 +162,7 @@ const Login = () => {
           </div>
           <div className='lOptionEmail'>
             <h6 className='lOtionEmailMessage'>Sign up with Email address</h6>
-          </div>
+          </div> */}
         </div>
 
         <form noValidate className='lForm' id='lForm' onSubmit={handleSubmit}>
@@ -168,14 +172,14 @@ const Login = () => {
                 type='email'
                 id='email'
                 ref={email}
-                className={`lInput ${emailErr ? 'inputErr' : ''}`}
+                className={`lInput ${emailErr ? "inputErr" : ""}`}
                 onBlur={handleBlur}
                 onChange={handleChange}
               />
               <label
                 htmlFor='email'
                 className={`lInputLabel ${emailLabelCss} ${
-                  emailErr ? 'labelErr' : ''
+                  emailErr ? "labelErr" : ""
                 }`}
               >
                 Email Address
@@ -186,16 +190,16 @@ const Login = () => {
           <div className={`lInputSetContainer`}>
             <div className={`lInputLabelContainer`}>
               <input
-                type={passwordVisible ? 'text' : 'password'}
+                type={passwordVisible ? "text" : "password"}
                 id='password'
-                className={`lInput ${passErr ? 'inputErr' : ''}`}
+                className={`lInput ${passErr ? "inputErr" : ""}`}
                 onBlur={handleBlur}
                 onChange={handleChange}
               />
               <label
                 htmlFor='password'
                 className={`lInputLabel ${passLabelCss} ${
-                  passErr ? 'labelErr' : ''
+                  passErr ? "labelErr" : ""
                 }`}
               >
                 Password

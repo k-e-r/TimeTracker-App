@@ -21,6 +21,17 @@
 
 .lLogo {
   margin-bottom: 2rem;
+
+  a {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-left: 0.3rem;
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+  }
 }
 
 .lLogo a {

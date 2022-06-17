@@ -113,8 +113,7 @@ const Edit = ({ handleEditTaskWindow, mode, checkBoxData, removeCheck }) => {
       new Date(e.target[5].value),
       new Date(e.target[4].value),
       { unit: "second" }
-    );
-    duration.split(" ");
+    ).split(" ");
 
     if (mode === "new") {
       try {

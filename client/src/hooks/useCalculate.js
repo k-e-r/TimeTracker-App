@@ -17,7 +17,7 @@ const useCalculate = (tasks, projects) => {
     }
     return data;
   });
-  resultArr.push("others");
+  resultArr.push({ title: "Without Project" });
   resultArr.push(totalTime - projectsTotalTime);
 
   return resultArr;

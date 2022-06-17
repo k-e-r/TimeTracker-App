@@ -1,0 +1,47 @@
+.calendarContainerTitle {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 0.5px solid #ccc;
+
+  .calendarContainerTitleController {
+    width: 10%;
+    // margin-left: 0.4rem;
+    min-width: 4.4rem;
+
+    .calendarMonthName {
+      margin-left: 0.4rem;
+    }
+  }
+
+  .calendarContainerTitleSet {
+    width: calc(90% / 7);
+    display: flex;
+    align-items: center;
+    min-width: 5.5rem;
+
+    .calendarTitleDate {
+      font-size: 1.5rem;
+      font-weight: 200;
+    }
+
+    .calendarTitleDetailBox {
+      display: flex;
+      flex-direction: column;
+
+      .calendarTitleDay {
+        margin-left: 0.4rem;
+        font-size: 0.8rem;
+        font-weight: 200;
+      }
+
+      .calendarTitleSumTime {
+        margin-left: 0.4rem;
+        font-size: 0.8rem;
+        font-weight: 200;
+        margin-bottom: 0.4rem;
+      }
+    }
+  }
+}

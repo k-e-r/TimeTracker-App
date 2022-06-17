@@ -15,49 +15,74 @@ import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { AuthContext } from "../../context/AuthContext";
+import useCalculate from "../../hooks/useCalculate";
 
-const Tables = ({ lists }) => {
+const Tables = () => {
+  const { user } = useContext(AuthContext);
+  const [lists, setLists] = useState([]);
+  const [getTasks, setGetTasks] = useState([]);
+  const [getProjects, setGetProjects] = useState([]);
+  const taskArr = useCalculate(getTasks, getProjects);
+
+  useEffect(() => {
+    const fetchTable = async () => {
+      try {
+        const resTasks = await axios.get(`/tasks/user/${user._id}`);
+        const resProjects = await axios.get(`/projects/user/${user._id}`);
+        setGetProjects(resProjects.data);
+        setGetTasks(resTasks.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchTable();
+  }, [user._id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let array = [];
+        const resultEven = taskArr.filter((n, i) => i % 2 === 0);
+        const resultOdd = taskArr.filter((n, i) => i % 2 === 1);       
+        for (let i = 0; i < resultEven.length; i++) {
+          array.push({
+            projectId: resultEven[i]._id,
+            name: resultEven[i].title,
+            time: resultOdd[i],
+          });
+        }
+        setLists(array);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [getProjects, getTasks]);
+
+  console.log(lists);
+
   const Row = ({ row }) => {
-    const { user } = useContext(AuthContext);
-    const [tasks, setTasks] = useState([{}]);
     const [open, setOpen] = useState(false);
-    const [duration, setDuration] = useState(0);
     const [durationAll, setDurationAll] = useState(0);
+    const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
       const fetchData = async () => {
         try {
-          var sum = 0;
-          const res = await axios.get(`/tasks/user/${user._id}`);
+          const res = await axios.get(`/tasks/project/${row.projectId}`);
 
-          for (let i = 0; i < res.data.length; i++) {
-            sum += res.data[i].taskDuration;
+          var sum = 0;
+          for (let i = 0; i < getTasks.length; i++) {
+            sum += getTasks[i].taskDuration;
           }
+          setTasks(res.data);
           setDurationAll(sum);
         } catch (err) {
           console.log(err);
         }
       };
       fetchData();
-    }, [user._id]);
-
-    useEffect(() => {
-      const fetchRow = async () => {
-        try {
-          const res = await axios.get(`/tasks/project/${row._id}`);
-          setTasks(res.data);
-
-          var sum = 0;
-          for (let i = 0; i < res.data.length; i++) {
-            sum += res.data[i].taskDuration;
-          }
-          setDuration(sum);
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      fetchRow();
-    }, [row._id]);
+    }, []);
 
     return (
       <>
@@ -71,9 +96,9 @@ const Tables = ({ lists }) => {
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
-          <TableCell>{row.title}</TableCell>
-          <TableCell>{duration}</TableCell>
-          <TableCell>{Math.floor((duration / durationAll) * 100)}%</TableCell>
+          <TableCell>{row.name}</TableCell>
+          <TableCell>{row.time}</TableCell>
+          <TableCell>{Math.floor((row.time / durationAll) * 100)}%</TableCell>
         </TableRow>
         {tasks.map((task) => (
           <TableRow key={task.id}>

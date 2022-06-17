@@ -1,42 +1,43 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import zxcvbn from 'zxcvbn';
-import * as yup from 'yup';
-import './register.scss';
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import zxcvbn from "zxcvbn";
+import * as yup from "yup";
+import "./register.scss";
 
-import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
-import { FcGoogle } from 'react-icons/fc';
+import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
+import { FcGoogle } from "react-icons/fc";
+import { MdAlarm } from "react-icons/md";
 
 const passMessage = [
-  'Weak',
-  'Weak',
-  'Moderately Strong',
-  'Moderately Strong',
-  'Strong',
+  "Weak",
+  "Weak",
+  "Moderately Strong",
+  "Moderately Strong",
+  "Strong",
 ];
 
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [emailLabelCss, setEmailLabelCss] = useState('');
-  const [passLabelCss, setPassLabelCss] = useState('');
+  const [emailLabelCss, setEmailLabelCss] = useState("");
+  const [passLabelCss, setPassLabelCss] = useState("");
   const [passStrengthNum, setPassStrengthNum] = useState(0);
-  const [emailErr, setEmailErr] = useState('');
-  const [passErr, setPassErr] = useState('');
-  const [axiosErr, setAxiosErr] = useState('');
+  const [emailErr, setEmailErr] = useState("");
+  const [passErr, setPassErr] = useState("");
+  const [axiosErr, setAxiosErr] = useState("");
   const emailSchema = yup.object({
     email: yup
       .string()
-      .email('Must be a valid email')
+      .email("Must be a valid email")
       .max(50)
-      .required('Email is required'),
+      .required("Email is required"),
   });
   const passSchema = yup.object({
     password: yup
       .string()
       .max(50)
-      .required('Password is required')
-      .test('strong', 'Password is not strong', () => passStrengthNum === 4),
+      .required("Password is required")
+      .test("strong", "Password is not strong", () => passStrengthNum === 4),
   });
 
   const email = useRef();
@@ -46,18 +47,18 @@ const Register = () => {
     const interval = setInterval(() => {
       try {
         const detect = document.querySelectorAll(
-          ':-internal-autofill-selected'
+          ":-internal-autofill-selected"
         );
         if (detect.length === 2) {
-          setEmailLabelCss('rInputLabelActive');
-          setPassLabelCss('rInputLabelActive');
-        } else if (detect[0]?.type === 'email') {
-          setEmailLabelCss('rInputLabelActive');
-        } else if (detect[1]?.type === 'password') {
-          setPassLabelCss('rInputLabelActive');
+          setEmailLabelCss("rInputLabelActive");
+          setPassLabelCss("rInputLabelActive");
+        } else if (detect[0]?.type === "email") {
+          setEmailLabelCss("rInputLabelActive");
+        } else if (detect[1]?.type === "password") {
+          setPassLabelCss("rInputLabelActive");
         }
       } catch (error) {
-        console.log('error:', error);
+        console.log("error:", error);
       }
 
       clearInterval(interval);
@@ -66,14 +67,14 @@ const Register = () => {
   }, []);
 
   const handleBlur = (e) => {
-    setAxiosErr('');
-    if (e.target.type === 'email') {
-      if (e.target.value) setEmailLabelCss('rInputLabelActive');
-      else setEmailLabelCss('');
+    setAxiosErr("");
+    if (e.target.type === "email") {
+      if (e.target.value) setEmailLabelCss("rInputLabelActive");
+      else setEmailLabelCss("");
       validateCheck(e.target.value, null);
     } else {
-      if (e.target.value) setPassLabelCss('rInputLabelActive');
-      else setPassLabelCss('');
+      if (e.target.value) setPassLabelCss("rInputLabelActive");
+      else setPassLabelCss("");
       validateCheck(null, e.target.value);
 
       const result = zxcvbn(e.target.value, [email.current.value]);
@@ -101,7 +102,7 @@ const Register = () => {
           email,
         })
         .then(function (value) {
-          setEmailErr('');
+          setEmailErr("");
           return true;
         })
         .catch(function (err) {
@@ -117,7 +118,7 @@ const Register = () => {
           password,
         })
         .then(function (value) {
-          setPassErr('');
+          setPassErr("");
           return true;
         })
         .catch(function (err) {
@@ -134,7 +135,7 @@ const Register = () => {
     e.preventDefault();
     const email = e.target[0].value;
     const password = e.target[1].value;
-    setAxiosErr('');
+    setAxiosErr("");
     const result = await validateCheck(email, password);
     if (!result.some((el) => el === false)) {
       const user = {
@@ -142,12 +143,12 @@ const Register = () => {
         password,
       };
       try {
-        await axios.post('/auth/register', user);
-        navigate('/login');
+        await axios.post("/auth/register", user);
+        navigate("/login");
       } catch (error) {
         console.log(error);
         // setAxiosErr(error.response.data.message);
-        setAxiosErr('User has already existed');
+        setAxiosErr("User has already existed");
       }
     }
   };
@@ -156,7 +157,10 @@ const Register = () => {
     <div className='Register'>
       <div className='rContainer'>
         <div className='rLogo'>
-          <a href='/register'>LOGO</a>
+          <a href='/register'>
+            TimeTracker
+            <MdAlarm />
+          </a>
         </div>
         <div className='rTitleContainer'>
           <h3 className='rTitle'>Sign up</h3>
@@ -165,7 +169,7 @@ const Register = () => {
           </span>
         </div>
         <div className='rOption'>
-          <button className='rOptionGoogle'>
+          {/* <button className='rOptionGoogle'>
             <FcGoogle />
             Sign Up With Google
           </button>
@@ -176,7 +180,7 @@ const Register = () => {
           </div>
           <div className='rOptionEmail'>
             <h6 className='rOtionEmailMessage'>Sign up with Email address</h6>
-          </div>
+          </div> */}
         </div>
 
         <form
@@ -192,13 +196,13 @@ const Register = () => {
                 type='email'
                 id='email'
                 ref={email}
-                className={`rInput ${emailErr ? 'inputErr' : ''}`}
+                className={`rInput ${emailErr ? "inputErr" : ""}`}
                 onBlur={handleBlur}
               />
               <label
                 htmlFor='email'
                 className={`rInputLabel ${emailLabelCss} ${
-                  emailErr ? 'labelErr' : ''
+                  emailErr ? "labelErr" : ""
                 }`}
               >
                 Email Address
@@ -209,9 +213,9 @@ const Register = () => {
           <div className={`rInputSetContainer`}>
             <div className={`rInputLabelContainer`}>
               <input
-                type={passwordVisible ? 'text' : 'password'}
+                type={passwordVisible ? "text" : "password"}
                 id='password'
-                className={`rInput ${passErr ? 'inputErr' : ''}`}
+                className={`rInput ${passErr ? "inputErr" : ""}`}
                 autoComplete='new-password'
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -219,7 +223,7 @@ const Register = () => {
               <label
                 htmlFor='password'
                 className={`rInputLabel ${passLabelCss} ${
-                  passErr ? 'labelErr' : ''
+                  passErr ? "labelErr" : ""
                 }`}
               >
                 Password

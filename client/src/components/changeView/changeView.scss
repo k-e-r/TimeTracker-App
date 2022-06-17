@@ -1,0 +1,86 @@
+.changeViewContainerBack {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+}
+
+.changeViewContainer {
+  position: absolute;
+  top: 2.75rem;
+  right: 0rem;
+  border: 0.5px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  width: 14rem;
+  padding: 1rem 0.5rem;
+  z-index: 10;
+
+  .selectViewTitle {
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin: 0rem 0 0.5rem 0.8rem;
+  }
+
+  .selectViewContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    .selectListContainer,
+    .selectCalendarContainer {
+      border: 1px solid rgb(217, 217, 217);
+      border-radius: 4px;
+      display: flex;
+      width: 5rem;
+      flex-direction: column;
+      align-items: center;
+      margin: 0.25rem 0;
+      font-size: 0.7rem;
+      font-weight: 400;
+      transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      cursor: pointer;
+
+      label {
+        width: 100%;
+        padding: 0.8rem 0.25rem 0.2rem;
+        font-size: 0.8rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: rgb(110, 110, 110);
+        cursor: pointer;
+
+        span {
+          margin-bottom: 0.4rem;
+        }
+      }
+
+      input[type="radio"] {
+        display: none;
+
+        &:checked + label {
+          color: rgb(103, 103, 103);
+          background-color: #fcc8bc;
+
+          svg {
+            fill: rgb(103, 103, 103);
+          }
+        }
+      }
+
+      &:hover {
+        background-color: rgb(231, 231, 231);
+        border-radius: 4px;
+      }
+
+      svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+}

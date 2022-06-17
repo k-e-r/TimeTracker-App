@@ -67,7 +67,7 @@ const TimerShowDetail = ({ data, handleEditProjectWindow, handleReload }) => {
     checkBoxData.forEach(async (removeEl) => {
       // delete
       try {
-        const res = await axios.delete(`/tasks/${removeEl.val._id}`);
+        await axios.delete(`/tasks/${removeEl.val._id}`);
       } catch (err) {
         console.log("err:", err);
       }

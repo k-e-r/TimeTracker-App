@@ -30,19 +30,19 @@ const Sidebar = () => {
     <div className='sidebar'>
       <div className='top'>
         <Link to='/' style={{ textDecoration: "none" }}>
-          <span className='logo'>TimeIsMoney</span>
+          <span className='logo'>TimeTracker</span>
         </Link>
       </div>
       <hr className='sidebarTitleHr' />
       <div className='center'>
         <ul>
           <p className='title'>TRACK</p>
-          <li>
-            <AccessAlarmIcon className='icon' />
-            <Link to='/timer' style={{ textDecoration: "none" }}>
+          <Link to='/timer' style={{ textDecoration: "none" }}>
+            <li>
+              <AccessAlarmIcon className='icon' />
               <span>Timer</span>
-            </Link>
-          </li>
+            </li>
+          </Link>
           <hr className='sidebarHr' />
           <p className='title'>ANALYZE</p>
           <Link to='/' style={{ textDecoration: "none" }}>
