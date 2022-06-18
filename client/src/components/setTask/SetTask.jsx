@@ -83,18 +83,15 @@ const SetTask = ({ setTask, handleEditProjectWindow, handleReload }) => {
   const setTime = () => {
     setSettingTimerMin(timeMinutes2);
     setSettingTimerSec(timeSeconds2);
-    console.log(timeMinutes2, ":", timeSeconds2);
-    console.log(Math.round(new Date().getTime() / 1000));
   };
 
   let startTime, pastTime;
   const countDown = () => {
     if (timerId === undefined) {
-      startTime = Math.round(new Date().getTime() / 1000);
+      startTime = Math.floor(new Date().getTime() / 1000);
       timerId = setInterval(() => {
-        pastTime = Math.round(new Date().getTime() / 1000) - startTime;
+        pastTime = Math.floor(new Date().getTime() / 1000) - startTime;
         const setTimeData = user.duration - pastTime;
-        console.log("pastTime", pastTime, "setTimeData", setTimeData);
         if (setTimeData < 0) {
           timeMinutes2 = 0;
           timeSeconds2 = 0;
@@ -147,7 +144,9 @@ const SetTask = ({ setTask, handleEditProjectWindow, handleReload }) => {
           //   duration = settingTimerMin * 60 + settingTimerSec;
           //   calcEndTime = beginTime + duration * 1000;
           // }
-          const duration = Math.floor((endTime - beginTime) / 1000);
+          console.log("endTime", endTime, "beginTime", beginTime);
+          const duration =
+            Math.floor(endTime / 1000) - Math.floor(beginTime / 1000);
           const res = await axios.post("/tasks", {
             userId: user._id,
             title: taskName.current.value || "no name",

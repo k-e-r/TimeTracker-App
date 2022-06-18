@@ -45,7 +45,7 @@ const Login = () => {
         if (detect.length === 2) {
           setEmailLabelCss("rInputLabelActive");
           setPassLabelCss("rInputLabelActive");
-        } else if (detect[0].type === "email") {
+        } else if (detect[0]?.type === "email") {
           setEmailLabelCss("rInputLabelActive");
         } else {
           setPassLabelCss("rInputLabelActive");
