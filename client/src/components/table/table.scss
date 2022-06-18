@@ -1,6 +1,17 @@
 .table{
   transition: all 0.2s;
-  &:hover {   
-    background-color:#fcc8bc59;
+  .row{
+    &:hover {   
+      background-color:#fcc8bc59;
+    }
+  }
+  .top{
+      font-size: 22px;
+      font-weight: 400;
+      color: #194350b9;
+      margin: 10px 0 15px 10px ;
+      display: flex;
+      align-items: center;
+      gap: 0 10px;   
   }
 }

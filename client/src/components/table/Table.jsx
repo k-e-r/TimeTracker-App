@@ -16,6 +16,7 @@ import Collapse from "@mui/material/Collapse";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { AuthContext } from "../../context/AuthContext";
 import useCalculate from "../../hooks/useCalculate";
+import ViewListOutlinedIcon from "@mui/icons-material/ViewListOutlined";
 
 const Tables = () => {
   const { user } = useContext(AuthContext);
@@ -86,7 +87,7 @@ const Tables = () => {
 
     return (
       <>
-        <TableRow key={row.id} className="table">
+        <TableRow key={row.id} className="table row">
           <TableCell className="tableCell">
             <IconButton
               aria-label="expand row"
@@ -142,12 +143,16 @@ const Tables = () => {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className="table">
+      <div className="top">
+        <ViewListOutlinedIcon fontSize="large" />
+        Your Projects
+      </div>
       <Table sx={{ minWidth: 650 }} aria-label="collapsible table">
         <TableHead>
           <TableRow>
             <TableCell className="tableCell">
-              <KeyboardArrowDownIcon />
+              <KeyboardArrowDownIcon className="arrow" />
             </TableCell>
             <TableCell className="tableCell">TITLE</TableCell>
             <TableCell className="tableCell">DURATION (s)</TableCell>
