@@ -16,6 +16,7 @@ import Collapse from "@mui/material/Collapse";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { AuthContext } from "../../context/AuthContext";
 import useCalculate from "../../hooks/useCalculate";
+import ViewListOutlinedIcon from "@mui/icons-material/ViewListOutlined";
 
 const Tables = () => {
   const { user } = useContext(AuthContext);
@@ -43,7 +44,7 @@ const Tables = () => {
       try {
         let array = [];
         const resultEven = taskArr.filter((n, i) => i % 2 === 0);
-        const resultOdd = taskArr.filter((n, i) => i % 2 === 1);       
+        const resultOdd = taskArr.filter((n, i) => i % 2 === 1);
         for (let i = 0; i < resultEven.length; i++) {
           array.push({
             projectId: resultEven[i]._id,
@@ -86,8 +87,8 @@ const Tables = () => {
 
     return (
       <>
-        <TableRow key={row.id} className="row">
-          <TableCell>
+        <TableRow key={row.id} className="table row">
+          <TableCell className="tableCell">
             <IconButton
               aria-label="expand row"
               size="small"
@@ -96,13 +97,16 @@ const Tables = () => {
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
-          <TableCell>{row.name}</TableCell>
-          <TableCell>{row.time}</TableCell>
-          <TableCell>{Math.floor((row.time / durationAll) * 100)}%</TableCell>
+          <TableCell className="tableCell">{row.name}</TableCell>
+          <TableCell className="tableCell">{row.time}</TableCell>
+          <TableCell className="tableCell">
+            {Math.floor((row.time / durationAll) * 100)}%
+          </TableCell>
         </TableRow>
         {tasks.map((task) => (
           <TableRow key={task.id}>
             <TableCell
+              className="tableCell"
               style={{
                 paddingBottom: 0,
                 paddingTop: 0,
@@ -113,14 +117,18 @@ const Tables = () => {
                 <Table>
                   <TableBody>
                     <TableRow>
-                      <TableCell>
+                      <TableCell className="tableCell">
                         <IconButton size="small">
                           <TaskAltIcon sx={{ color: "gray" }} />
                         </IconButton>
                       </TableCell>
-                      <TableCell align="left">{task.title}</TableCell>
-                      <TableCell>{task.taskDuration}</TableCell>
-                      <TableCell>
+                      <TableCell align="left" className="tableCell">
+                        {task.title}
+                      </TableCell>
+                      <TableCell className="tableCell">
+                        {task.taskDuration}
+                      </TableCell>
+                      <TableCell className="tableCell">
                         {Math.floor((task.taskDuration / durationAll) * 100)}%
                       </TableCell>
                     </TableRow>
@@ -135,16 +143,20 @@ const Tables = () => {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className="table">
+      <div className="top">
+        <ViewListOutlinedIcon fontSize="large" />
+        Your Projects
+      </div>
       <Table sx={{ minWidth: 650 }} aria-label="collapsible table">
         <TableHead>
           <TableRow>
-            <TableCell>
-              <KeyboardArrowDownIcon />
+            <TableCell className="tableCell">
+              <KeyboardArrowDownIcon className="arrow" />
             </TableCell>
-            <TableCell>TITLE</TableCell>
-            <TableCell>DURATION (s)</TableCell>
-            <TableCell>PERCENTAGE</TableCell>
+            <TableCell className="tableCell">TITLE</TableCell>
+            <TableCell className="tableCell">DURATION (s)</TableCell>
+            <TableCell className="tableCell">PERCENTAGE</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

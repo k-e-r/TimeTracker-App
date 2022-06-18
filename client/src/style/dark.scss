@@ -1,7 +1,17 @@
 .app.dark {
   background-color: #111;
   color: rgb(156, 156, 156);
-
+  
+  .featured{
+    .title{
+      color: #669bacb9;
+    }
+  }
+  .chart{
+  .title{
+    color: #669bacb9;
+  }
+}
   .chartGrid {
     stroke: rgba(228, 228, 228, 0.219);
   }
@@ -11,6 +21,17 @@
 
     .tableCell {
       color: gray;
+    }
+    .top{
+      color: #669bacb9;
+    }
+    .arrow {
+      color: gray;
+    }
+    .row{
+      &:hover {   
+        background-color:#3c4d5659;
+      }
     }
   }
 
