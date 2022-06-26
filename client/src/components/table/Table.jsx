@@ -60,8 +60,6 @@ const Tables = () => {
     fetchData();
   }, [getProjects, getTasks]);
 
-  console.log(lists);
-
   const Row = ({ row }) => {
     const [open, setOpen] = useState(false);
     const [durationAll, setDurationAll] = useState(0);
