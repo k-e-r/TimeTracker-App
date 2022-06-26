@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import zxcvbn from "zxcvbn";
 import * as yup from "yup";
@@ -264,9 +264,9 @@ const Register = () => {
 
         <hr className='rHr' />
 
-        <a className='rChangeMode' href='/login'>
+        <Link to='/login' className='rChangeMode'>
           Already have an account?
-        </a>
+        </Link>
       </div>
     </div>
   );

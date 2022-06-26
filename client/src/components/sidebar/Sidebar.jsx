@@ -21,6 +21,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     try {
       dispatch({ type: "LOGOUT", payload: null });
+      localStorage.removeItem("user");
       navigate("/login");
     } catch (error) {
       console.log(error);

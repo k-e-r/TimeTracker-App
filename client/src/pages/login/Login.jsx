@@ -1,5 +1,5 @@
 import { useContext, useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import * as yup from "yup";
@@ -218,9 +218,9 @@ const Login = () => {
 
         <hr className='lHr' />
 
-        <a className='lChangeMode' href='/register'>
+        <Link to='/register' className='lChangeMode'>
           Don't have an account?
-        </a>
+        </Link>
       </div>
     </div>
   );
