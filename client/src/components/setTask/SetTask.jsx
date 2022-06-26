@@ -15,8 +15,10 @@ import Edit from "../edit/Edit";
 import Alarm from "../alarm/Alarm";
 import Setting from "../setting/Setting";
 import { Helmet } from "react-helmet";
+import timerFunc from "../../assets/timer";
 
 let timerId;
+let baseCountTime;
 const SetTask = ({ setTask, handleEditProjectWindow, handleReload }) => {
   const { user } = useContext(AuthContext);
   const [titleText, setTitleText] = useState("TimeTracker");
@@ -64,55 +66,37 @@ const SetTask = ({ setTask, handleEditProjectWindow, handleReload }) => {
       // break time
       setSettingTimerMin(shortBreakTimeMinutes);
       setSettingTimerSec(shortBreakTimeSeconds);
+      baseCountTime = user.shortBreak;
+      timerFunc("", baseCountTime, setTime, "stop");
     } else if (mode === "longBreak") {
       // long break time
       setSettingTimerMin(longBreakTimeMinutes);
       setSettingTimerSec(longBreakTimeSeconds);
+      baseCountTime = user.longBreak;
+      timerFunc("", baseCountTime, setTime, "stop");
     } else if (mode === "pomodoro") {
       // initial time
       setSettingTimerMin(timeMinutes);
       setSettingTimerSec(timeSeconds);
+      baseCountTime = user.duration;
+      timerFunc("", baseCountTime, setTime, "stop");
     } else {
       setSettingTimerMin(0);
       setSettingTimerSec(0);
+      baseCountTime = 0;
     }
   };
 
-  let timeMinutes2 = timeMinutes;
-  let timeSeconds2 = timeSeconds;
-  const setTime = () => {
-    setSettingTimerMin(timeMinutes2);
-    setSettingTimerSec(timeSeconds2);
-  };
+  const setTime = (min, sec, flg = "") => {
+    setSettingTimerSec(sec);
+    setSettingTimerMin(min);
 
-  let startTime, pastTime;
-  const countDown = () => {
-    if (timerId === undefined) {
-      startTime = Math.floor(new Date().getTime() / 1000);
-      timerId = setInterval(() => {
-        pastTime = Math.floor(new Date().getTime() / 1000) - startTime;
-        const setTimeData = user.duration - pastTime;
-        if (setTimeData < 0) {
-          timeMinutes2 = 0;
-          timeSeconds2 = 0;
-        } else {
-          timeMinutes2 = Math.floor(setTimeData / 60);
-          timeSeconds2 = Math.floor(setTimeData % 60);
-        }
-        setTime();
-      }, 100);
-    }
-  };
-
-  const countUp = () => {
-    if (timerId === undefined) {
-      startTime = Math.round(new Date().getTime() / 1000);
-      timerId = setInterval(() => {
-        pastTime = Math.round(new Date().getTime() / 1000) - startTime;
-        timeMinutes2 = Math.floor(pastTime / 60);
-        timeSeconds2 = Math.floor(pastTime % 60);
-        setTime();
-      }, 100);
+    if (flg === "finish") {
+      setAlarmOpen(true);
+      setStartTimer(true); // stop
+      setEndTime(new Date().getTime());
+    } else if (flg === "stop") {
+      setEndTime(new Date().getTime());
     }
   };
 
@@ -133,25 +117,23 @@ const SetTask = ({ setTask, handleEditProjectWindow, handleReload }) => {
     } else {
       const taskSubmit = async () => {
         if (endTime) {
-          // let duration, calcEndTime;
-          // if (user.timerMode === "pomodoro" && alarmOpen) {
-          //   duration = user.duration;
-          //   calcEndTime = beginTime + duration * 1000;
-          // } else if (user.timerMode === "pomodoro" && !alarmOpen) {
-          //   duration = user.duration - (settingTimerMin * 60 + settingTimerSec);
-          //   calcEndTime = beginTime + duration * 1000;
-          // } else if (user.timerMode !== "pomodoro") {
-          //   duration = settingTimerMin * 60 + settingTimerSec;
-          //   calcEndTime = beginTime + duration * 1000;
-          // }
-          console.log("endTime", endTime, "beginTime", beginTime);
-          const duration =
-            Math.floor(endTime / 1000) - Math.floor(beginTime / 1000);
+          let duration, calcEndTime;
+          if (user.timerMode === "pomodoro" && alarmOpen) {
+            duration = user.duration;
+            calcEndTime = beginTime + duration * 1000;
+          } else if (user.timerMode === "pomodoro" && !alarmOpen) {
+            duration = user.duration - (settingTimerMin * 60 + settingTimerSec);
+            calcEndTime = beginTime + duration * 1000;
+          } else if (user.timerMode !== "pomodoro") {
+            duration = settingTimerMin * 60 + settingTimerSec;
+            calcEndTime = beginTime + duration * 1000;
+          }
+          // console.log("duration", (endTime - beginTime) / 1000, duration);
           const res = await axios.post("/tasks", {
             userId: user._id,
             title: taskName.current.value || "no name",
             startTime: beginTime,
-            finishTime: endTime,
+            finishTime: calcEndTime,
             taskDuration: duration,
             projectId: projectName._id,
             projectTitle: projectName.title,
@@ -176,23 +158,14 @@ const SetTask = ({ setTask, handleEditProjectWindow, handleReload }) => {
 
   useEffect(() => {
     if (!startTimer) {
-      if (user.timerMode === "pomodoro") {
-        if (settingTimerSec === 0 && settingTimerMin === 0) {
-          clearInterval(timerId);
-          // timerInit();
-          // api call
-          setAlarmOpen(true);
-          setStartTimer(true); // stop
-          setEndTime(new Date().getTime());
-        } else {
-          countDown();
-        }
+      if (user.timerMode !== "timer") {
+        timerFunc(beginTime, baseCountTime, setTime, "start");
       } else {
-        countUp();
+        timerFunc(beginTime, baseCountTime, setTime, "start", false);
         setPomodoroCycle(0);
       }
     }
-  }, [startTimer, settingTimerSec]);
+  }, [startTimer]);
 
   const setProject = (project) => {
     setProjectName(project);
@@ -206,10 +179,12 @@ const SetTask = ({ setTask, handleEditProjectWindow, handleReload }) => {
     if (startTimer) {
       setBeginTime(new Date().getTime());
     } else {
-      clearInterval(timerId);
-      // timerInit();
-      // api call
       setEndTime(new Date().getTime());
+      if (user.timerMode === "timer") {
+        timerFunc(beginTime, baseCountTime, setTime, "stop", false);
+      } else {
+        timerFunc(beginTime, baseCountTime, setTime, "stop");
+      }
     }
     setStartTimer((prev) => !prev);
   };

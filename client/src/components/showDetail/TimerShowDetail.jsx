@@ -79,7 +79,7 @@ const TimerShowDetail = ({ data, handleEditProjectWindow, handleReload }) => {
     const reloadInterval = setInterval(() => {
       handleReload();
       clearInterval(reloadInterval);
-    }, 1000);
+    }, 800);
   };
 
   return (

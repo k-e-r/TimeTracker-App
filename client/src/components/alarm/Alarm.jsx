@@ -12,9 +12,11 @@ const Alarm = ({ handleAlarmWindow, pomodoroCycle }) => {
   };
 
   useEffect(() => {
-    audio.play();
+    let playPromise = audio.play();
     const interval = setInterval(() => {
-      audio.pause();
+      playPromise.then(() => {
+        audio.pause();
+      });
       clearInterval(interval);
     }, 2000);
 
