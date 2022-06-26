@@ -75,17 +75,8 @@ const Navbar = () => {
     fetchData();
   }, [user._id]);
 
-  const handleOpen = (e) => {
-    if (e.target === e.currentTarget) {
-      setOpen(false);
-    } else {
-      setOpen(!open);
-    }
-  };
-
   return (
     <>
-      <div className="whole" onClick={handleOpen}></div>
       <div className="navbar">
         <div className="wrapper">
           <div className="top">
