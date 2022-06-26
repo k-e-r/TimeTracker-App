@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.36ba7719.css",
-    "main.js": "/static/js/main.a6a3a25f.js",
+    "main.css": "/static/css/main.cd736872.css",
+    "main.js": "/static/js/main.b6155ea5.js",
     "static/media/ClockAlarm.mp3": "/static/media/ClockAlarm.b8152dabf49e4b9cbe18.mp3",
     "index.html": "/index.html",
-    "main.36ba7719.css.map": "/static/css/main.36ba7719.css.map",
-    "main.a6a3a25f.js.map": "/static/js/main.a6a3a25f.js.map"
+    "main.cd736872.css.map": "/static/css/main.cd736872.css.map",
+    "main.b6155ea5.js.map": "/static/js/main.b6155ea5.js.map"
   },
   "entrypoints": [
-    "static/css/main.36ba7719.css",
-    "static/js/main.a6a3a25f.js"
+    "static/css/main.cd736872.css",
+    "static/js/main.b6155ea5.js"
   ]
 }
